@@ -2,11 +2,16 @@ package handlers
 
 import (
 	"fmt"
-	"io"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
 )
 
 func GetHelloHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("got /hello request\n")
-	io.WriteString(w, "Hello World!\n")
+	fmt.Fprintf(w, "Hello World!")
+}
+
+func GetHelloWithParamHandler(w http.ResponseWriter, r *http.Request) {
+	name := chi.URLParam(r, "name")
+	fmt.Fprintf(w, "Hello, %s!", name)
 }
