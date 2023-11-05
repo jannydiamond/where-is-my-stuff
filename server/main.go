@@ -3,11 +3,13 @@ package main
 import (
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"wims/internal/api/handlers"
 	"wims/internal/api/routes"
 	"wims/internal/config"
+	"wims/internal/database"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -19,6 +21,14 @@ func main() {
 
 	fmt.Printf("Server will listen on port %d\n", cfg.Server.Port)
 
+	// Set up the database connection
+	db, dbErr := database.Connect()
+	if dbErr != nil {
+		log.Fatal(dbErr)
+	}
+	defer db.Close()
+
+	// Api routes
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
