@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  api:
+    restart: on-failure
+    build:
+      dockerfile: ./docker/development/api/Dockerfile
+      context: './'
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./server/:/app
+    networks:
+      - internal
+      # so we can access/inspect the db from the host system
+      - default
+
+networks:
+  internal:
+    internal: true
