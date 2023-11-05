@@ -1,13 +1,39 @@
 version: '3.8'
 
 services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_DB: ${PGDATABASE}
+    ports:
+      - '${DB_LOCAL_PORT}:${PGPORT}'
+    volumes:
+      - ./docker/development/postgres/data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # - ./server/sql/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+    networks:
+      - internal
+      # so we can access/inspect the db from the host system
+      - default
+
   api:
     restart: on-failure
     build:
       dockerfile: ./docker/development/api/Dockerfile
       context: './'
+    environment:
+      USERNAME: ${PGUSER}
+      PASSWORD: ${PGPASSWORD}
+      HOST: db
+      SCHEMA: ${PGDATABASE}
     ports:
       - '4000:4000'
+    depends_on:
+      - db
     volumes:
       - ./server/:/app
     networks:

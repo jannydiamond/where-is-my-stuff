@@ -1,2 +1,5 @@
+.env
+postgres
+
 # for go air
 tmp
