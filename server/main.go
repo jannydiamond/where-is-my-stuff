@@ -36,6 +36,7 @@ func main() {
 	r.Get("/", handlers.GetRootHandler)
 
 	routes.SetHelloRoutes(r)
+	routes.SetUsersRoutes(r, db)
 
 	// Start the HTTP server
 	addr := fmt.Sprintf(":%d", cfg.Server.Port)
