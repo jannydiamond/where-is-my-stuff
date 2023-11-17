@@ -30,6 +30,7 @@ services:
       PASSWORD: ${PGPASSWORD}
       HOST: db
       SCHEMA: ${PGDATABASE}
+      PORT: ${PGPORT}
     ports:
       - '4000:4000'
     depends_on:
